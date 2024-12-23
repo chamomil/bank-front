@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BASE_MSBANK_URL, BASE_MSUSER_URL, SIGN_IN_ROUTE } from "../utils/const";
+import { BASE_MSUSER_URL, SIGN_IN_ROUTE } from "../utils/const";
 import axios from "axios";
 
 function Hist() {
@@ -39,14 +39,14 @@ function Hist() {
     });
   }, [access, refresh]);
 
-  return <div>
+  return <div id="auth-hist">
     {data?.items?.length ? data?.items.map((item) => <HistEntity histEntity={item}></HistEntity>) :
       <p>История входов отсутствует</p>}
   </div>
 }
 
 function HistEntity({histEntity}) {
- return <div>
+ return <div className="histEntity">
    <p>Агент: {histEntity.agent}</p>
    <p>IP: {histEntity.ip}</p>
    <p>Время входа: {histEntity.timestamp}</p>

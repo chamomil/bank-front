@@ -56,10 +56,12 @@ function Transaction({ transaction, access, refresh }) {
     <p>Количество средств: {transaction.amountCents}</p>
     <p>Дата создания: {transaction.createdAt}</p>
     <p>Описание: {transaction.description}</p>
-    {transaction.status === "BLOCKED" ? <button onClick={() => {
+    {transaction.status?.trim().toUpperCase() === "BLOCKED" ? <button onClick={() => {
       axios.patch(`/v1/transactions/${transaction.id}?status=CANCELLED`, {}, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Bearer ${access}`, "Access-Control-Allow-Origin": "*" },
+      }).then((response) => {
+        window.location.reload()
       }).catch((error) => {
         axios.post("/v1/auth/refresh", { "refreshToken": refresh }, {
           baseURL: BASE_MSUSER_URL,
@@ -72,14 +74,15 @@ function Transaction({ transaction, access, refresh }) {
           axios.patch(`/v1/transactions/${transaction.id}?status=CANCELLED`, {}, {
             baseURL: BASE_MSBANK_URL,
             headers: { Authorization: `Bearer ${data?.tokens?.accessToken}`, "Access-Control-Allow-Origin": "*" },
-          }).then((response) => {});
+          }).then((response) => {
+            window.location.reload()
+          });
         }).catch((error) => {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("refreshToken");
           window.location.href = SIGN_IN_ROUTE;
         });
       });
-      window.location.reload()
     }}>Отменить транзакцию</button> : <p></p>}
     <hr/>
   </div>;

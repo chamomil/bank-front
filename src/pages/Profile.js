@@ -34,7 +34,6 @@ function Profile() {
       headers: { Authorization: `Bearer ${access}`, "Access-Control-Allow-Origin": "*" },
     }).then((response) => {
       setCountries(response.data);
-      console.log(countries)
     }).catch((error) => {
       axios.post("/v1/auth/refresh", { "refreshToken": refresh }, {
         baseURL: BASE_MSUSER_URL,
@@ -63,7 +62,6 @@ function Profile() {
       baseURL: BASE_MSUSER_URL,
       headers: { Authorization: `Bearer ${access}`, "Access-Control-Allow-Origin": "*" },
     }).then((response) => {
-      console.log(data);
       setData(response.data?.personalData);
     }).catch((error) => {
       axios.post("/v1/auth/refresh", { "refreshToken": refresh }, {
@@ -81,9 +79,9 @@ function Profile() {
           setData(response.data?.personaldata);
         });
       }).catch((error) => {
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-        window.location.href = SIGN_IN_ROUTE;
+        // localStorage.removeItem("accessToken");
+        // localStorage.removeItem("refreshToken");
+        // window.location.href = SIGN_IN_ROUTE;
       });
     });
   }, [access, refresh]);
@@ -99,7 +97,6 @@ function Profile() {
 
     var liveInCountry = document.getElementById("liveInCountry");
     for (var i, j = 0; i = liveInCountry.options[j]; j++) {
-      console.log(i)
       if (i.text === data?.liveInCountry) {
         liveInCountry.selectedIndex = j;
         break;
@@ -114,7 +111,7 @@ function Profile() {
     document.getElementById("dateOfBirth").value = data?.dateOfBirth;
     document.getElementById("address").value = data?.address;
   }
-  return (<div>
+  return (<div id="profile">
     <form id="personal-data" onSubmit={async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
@@ -161,42 +158,53 @@ function Profile() {
         });
       });
     }}>
-      <div className="description"><p>Персональные данные</p></div>
+      <h3 className="description">Персональные данные</h3>
       <label htmlFor="gender">Пол:</label>
       <select id="gender" name="gender">
         <option value=""></option>
         <option value="M">Мужской</option>
         <option value="F">Женский</option>
       </select>
+      <br/>
 
       <label htmlFor="lastName">Фамилия:</label>
       <input type="text" id="lastName" name="lastName"/>
+      <br/>
 
       <label htmlFor="firstName">Имя:</label>
       <input type="text" id="firstName" name="firstName"/>
+      <br/>
 
       <label htmlFor="fathersName">Отчество:</label>
       <input type="text" id="fathersName" name="fathersName"/>
+      <br/>
 
       <label htmlFor="phoneNumber">Номер телефона:</label>
       <input type="tel" id="phoneNumber" name="phoneNumber"/>
+      <br/>
 
       <label htmlFor="passportId">Идентификационный номер паспорта:</label>
       <input type="tel" id="passportId" name="passportId"/>
+      <br/>
 
       <label htmlFor="dateOfBirth">Дата рождения:</label>
       <input type="date" id="dateOfBirth" name="dateOfBirth"/>
+      <br/>
 
       <label htmlFor="liveInCountry">Страна проживания:</label>
-      <select id="liveInCountry" name="liveInCountry" >
+      <select id="liveInCountry" name="liveInCountry">
         <option value=""></option>
-        {countries?.length ? countries.map((item) => <option value={item.id} selected={item.name === data?.liveInCountry}>{item.name}</option>) : <p></p>}
+        {countries?.length ? countries.map((item) => <option value={item.id}
+                                                             selected={item.name === data?.liveInCountry}>{item.name}</option>) :
+          <p></p>}
         {/*<option value="1">Республика Беларусь</option>*/}
         {/*<option value="2">Россия</option>*/}
       </select>
+      <br/>
 
       <label htmlFor="address">Адрес проживания:</label>
       <input type="text" id="address" name="address"/>
+      <br/>
       <button>Сохранить данные</button>
     </form>
     <Link to={WORKPLACES_ROUTE}>Работа</Link>

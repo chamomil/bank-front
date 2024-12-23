@@ -1,18 +1,18 @@
-.sign-in {
+#workplaces {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 80vh;
 }
 
-.sign-in button{
+#workplaces form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#places {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
     width: 100%;
 }
-
-.sign-in form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-

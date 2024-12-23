@@ -39,11 +39,11 @@ function Workplaces() {
       });
     });
   }, [access, refresh]);
-  return <div>
+  return <div id={"workplaces"}>
     <form onSubmit={async (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(e.target).entries());
-      if (data && !formData.hasOwnProperty("endDate")) {
+      if (data && (!formData.hasOwnProperty("endDate") || formData.endDate === "")) {
         toast.error("Перед добавлением необходимо заполнить дату окончания прошлой работы")
         return;
       }
@@ -103,7 +103,9 @@ function Workplaces() {
       <button>Добавить новое место работы</button>
     </form>
     <hr/>
-    {data?.length ? data?.map((item) => <Workplace workplace={item}></Workplace>) : <p>Работа не указана</p>}
+    <div id="places">
+      {data?.length ? data?.map((item) => <Workplace workplace={item}></Workplace>) : <p>Работа не указана</p>}
+    </div>
   </div>
 }
 

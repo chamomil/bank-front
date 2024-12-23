@@ -55,6 +55,8 @@ function Atm() {
       axios.post("/v1/atm/supplement", { "amountCents": +atmAm }, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Basic ${btoa(atmLogin + ":" + atmPassword)}`, "Access-Control-Allow-Origin": "*" },
+      }).then(() => {
+        window.location.reload();
       }).catch((err) => {
         if (err.response?.data?.internalCode === "-6") {
           toast.error("Неверные логин и пароль");
@@ -80,6 +82,8 @@ function Atm() {
       axios.post("/v1/atm/withdrawal", { "amountCents": +atmAm }, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Basic ${btoa(atmLogin + ":" + atmPassword)}`, "Access-Control-Allow-Origin": "*" },
+      }).then(() => {
+        window.location.reload();
       }).catch((err) => {
         if (err.response?.data?.internalCode === "-6") {
           toast.error("Неверные логин и пароль");
@@ -112,6 +116,8 @@ function Atm() {
       axios.post("/v1/atm/user/supplement", { "amountCents": +atmAm, accountId: +userAccId }, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Basic ${btoa(atmLogin + ":" + atmPassword)}`, "Access-Control-Allow-Origin": "*" },
+      }).then(() => {
+        window.location.reload();
       }).catch((err) => {
         if (err.response?.data?.internalCode === "-6") {
           toast.error("Неверные логин и пароль");
@@ -144,6 +150,8 @@ function Atm() {
       axios.post("/v1/atm/user/withdrawal", { "amountCents": +atmAm, accountId: +userAccId }, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Basic ${btoa(atmLogin + ":" + atmPassword)}`, "Access-Control-Allow-Origin": "*" },
+      }).then(() => {
+        window.location.reload();
       }).catch((err) => {
         if (err.response?.data?.internalCode === "-6") {
           toast.error("Неверные логин и пароль");

@@ -50,16 +50,18 @@ function Accounts() {
 
   return (
     <div>
-      <Link to={PROFILE_ROUTE}>Профиль</Link>
-      <br/>
-      <Link to={HIST_ROUTE}>История входов в аккаунт</Link>
-      <br/>
-      <button onClick={() => {
-        localStorage.clear()
-        window.location.href = SIGN_IN_ROUTE;
-      }}>Выход</button>
-      {data?.accounts?.length ? data.accounts.map((account) => <Account account={account}></Account>) :
-        <p>У Вас нет открытых счетов</p>}
+      <div className="navigate">
+        <Link to={PROFILE_ROUTE}>Профиль</Link>
+        <Link to={HIST_ROUTE}>История входов в аккаунт</Link>
+        <button onClick={() => {
+          localStorage.clear()
+          window.location.href = SIGN_IN_ROUTE;
+        }}>Выход</button>
+      </div>
+      <div className="accounts">
+        {data?.accounts?.length ? data.accounts.map((account) => <Account account={account}></Account>) :
+          <p>У Вас нет открытых счетов</p>}
+      </div>
       <button onClick={() => {
         axios.get("/v1/me", {
           baseURL: BASE_MSUSER_URL,
@@ -106,7 +108,7 @@ const schema = Joi.object({
 function Account({ account }) {
   const access = localStorage.getItem("accessToken");
   const refresh = localStorage.getItem("refreshToken");
-  return <div>
+  return <div className="account">
     <p>Номер счёта: {account.id}</p>
     <p>Баланс: {account.balanceCents}</p>
     <p>Статус: {account.status}</p>
@@ -130,6 +132,8 @@ function Account({ account }) {
         }, {
           baseURL: BASE_MSBANK_URL,
           headers: { Authorization: `Bearer ${access}`, "Access-Control-Allow-Origin": "*" },
+        }).then(() => {
+          window.location.reload();
         }).catch((error) => {
           if (error.response.status === 400) {
             toast.error(error.response?.data?.userMessage);
@@ -152,7 +156,8 @@ function Account({ account }) {
             }, {
               baseURL: BASE_MSBANK_URL,
               headers: { Authorization: `Bearer ${data?.tokens?.accessToken}`, "Access-Control-Allow-Origin": "*" },
-            }).then((response) => {
+            }).then(() => {
+              window.location.reload();
             });
           }).catch((error) => {
             if (error.response.status === 400) {
@@ -180,6 +185,8 @@ function Account({ account }) {
       axios.patch(`/v1/accounts/${account.id}`, {}, {
         baseURL: BASE_MSBANK_URL,
         headers: { Authorization: `Bearer ${access}`, "Access-Control-Allow-Origin": "*" },
+      }).then(() => {
+        window.location.reload();
       }).catch((error) => {
         axios.post("/v1/auth/refresh", { "refreshToken": refresh }, {
           baseURL: BASE_MSUSER_URL,
@@ -194,6 +201,7 @@ function Account({ account }) {
             baseURL: BASE_MSBANK_URL,
             headers: { Authorization: `Bearer ${data?.tokens?.accessToken}`, "Access-Control-Allow-Origin": "*" },
           }).then((response) => {
+            window.location.reload();
           });
         }).catch((error) => {
           localStorage.removeItem("accessToken");
@@ -201,10 +209,10 @@ function Account({ account }) {
           window.location.href = SIGN_IN_ROUTE;
         });
       });
-      window.location.reload();
     }}>Заблокировать счёт
     </button>
-    <Link to={`${TRANSACTIONS_HIST_ROUTE}/${account.id}`}>Просмотреть историю транзакций</Link>
+    <br/>
+    <Link to={`${TRANSACTIONS_HIST_ROUTE}/${account.id}`} className="transaction-history-link">Просмотреть историю транзакций</Link>
     <hr/>
   </div>;
 }

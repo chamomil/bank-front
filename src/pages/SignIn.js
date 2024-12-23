@@ -6,7 +6,8 @@ import axios from "axios";
 
 function SignIn(props) {
   return (
-    <div id="sign-in">
+    <div className="sign-in">
+      <h2>Welcome</h2>
       <form onSubmit={async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
